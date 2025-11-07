@@ -1,0 +1,15 @@
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 2rem;
+  width: 100%;
+  background: linear-gradient(135deg, #a0c4ff, #caffbf);
+}
+
+.home-buttons {
+  display: flex;
+  gap: 1.5rem;
+}
