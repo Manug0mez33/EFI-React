@@ -3,11 +3,13 @@ import Home from "./components/Home";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from './components/LoginForm';
 import CreatePostForm from "./components/CreatePostForm";
+import PostFeed from "./components/PostFeed";
 
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Home />} />
+      <Route path="/posts" element={<PostFeed />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/login" element={<LoginForm />} />
       <Route path="/post" element={<CreatePostForm />} />
