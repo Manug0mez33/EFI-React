@@ -6,6 +6,7 @@ import { InputText } from 'primereact/inputtext'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { AuthContext } from '../context/AuthContext.jsx'
+import { Password } from 'primereact/password'
 import "../styles/LoginForm.css"
 
 
@@ -48,7 +49,7 @@ export default function LoginForm() {
                         </div>
                         <div className='form-field'>
                             <label>Contraseña</label>
-                            <Field as={InputText} id='password' name='password' />
+                            <Field as={Password} id='password' name='password' className='w-full' inputClassName='w-full' feedback={false} toggleMask/>
                             <ErrorMessage name='password' component='small' className='error' />
                         </div>
                         <Button type='submit' label={isSubmitting ? "Ingresando..." : 'Ingresar'} disabled={isSubmitting} />

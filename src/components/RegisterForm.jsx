@@ -5,8 +5,8 @@ import { InputText } from 'primereact/inputtext'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import { Dropdown } from 'primereact/dropdown'
+import { Password } from 'primereact/password'
 import "../styles/RegisterForm.css"
-
 
 const validationSchema = Yup.object({
     username: Yup.string().required("El nombre es obligatorio"),
@@ -67,7 +67,7 @@ export default function RegisterForm() {
                         </div>
                         <div className='form-field'>
                             <label>Contraseña</label>
-                            <Field as={InputText} id='password' name='password' />
+                            <Field as={Password} id='password' name='password' className='w-full' inputClassName='w-full' feedback={false} toggleMask/>
                             <ErrorMessage name='password' component='small' className='error' />
                         </div>
                         <div className='form-field'>

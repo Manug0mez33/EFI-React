@@ -2,6 +2,7 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./components/Home";
 import RegisterForm from "./components/RegisterForm";
 import LoginForm from './components/LoginForm';
+import CreatePostForm from "./components/CreatePostForm";
 
 export default function App() {
   return (
@@ -9,6 +10,8 @@ export default function App() {
       <Route path="/" element={<Home />} />
       <Route path="/register" element={<RegisterForm />} />
       <Route path="/login" element={<LoginForm />} />
+      <Route path="/post" element={<CreatePostForm />} />
+      <Route path="/category" />
     </Routes>
   );
 }
