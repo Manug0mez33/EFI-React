@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { AuthContext } from '../context/AuthContext'; //
@@ -7,6 +7,7 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { MultiSelect } from 'primereact/multiselect';
+import { useNavigate } from 'react-router-dom';
 import "../styles/CreatePostForm.css"
 
 const validationSchema = Yup.object({
@@ -17,6 +18,7 @@ const validationSchema = Yup.object({
 
 export default function CreatePostForm() {
     const { token } = useContext(AuthContext);
+    const navigate = useNavigate()
 
     const [categories, setCategories] = useState([]);
     useEffect(() => {
@@ -63,7 +65,7 @@ export default function CreatePostForm() {
 
             toast.success("Post creado con éxito");
             resetForm();
-            window.location.reload();
+            setTimeout(() => navigate('/posts'), 2000) 
         } catch (error) {
             toast.error(error.message);
             console.error(error);

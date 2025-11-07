@@ -25,7 +25,7 @@ export default function LoginForm() {
         const success = await login(values.email, values.password)
         if (success) {
             resetForm()
-            setTimeout(() => navigate('/'), 2000)   
+            setTimeout(() => navigate('/posts'), 2000)   
         } else {
             setFieldValue('password', '')
         }
