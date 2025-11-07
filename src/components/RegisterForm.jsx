@@ -4,6 +4,7 @@ import { Button } from 'primereact/button'
 import { InputText } from 'primereact/inputtext'
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import { Dropdown } from 'primereact/dropdown'
 import "../styles/RegisterForm.css"
 
 
@@ -38,6 +39,12 @@ export default function RegisterForm() {
         }
     }
 
+    const roles = [
+        { label: 'Usuario', value: 'user' },
+        { label: 'Administrador', value: 'admin' },
+        { label: 'Moderador', value: 'moderator' }
+    ]
+
     return (
         <div className='register-container'>
             <h2>Crear cuenta</h2>
@@ -62,6 +69,11 @@ export default function RegisterForm() {
                             <label>Contraseña</label>
                             <Field as={InputText} id='password' name='password' />
                             <ErrorMessage name='password' component='small' className='error' />
+                        </div>
+                        <div className='form-field'>
+                            <label>Rol</label>
+                            <Field as={Dropdown} id='role' name='role' options={roles} optionLabel='label' optionValue='value'/>
+                            <ErrorMessage name='role' component='small' className='error' />
                         </div>
                         <Button type='submit' label={isSubmitting ? "Registrando..." : 'Registrarse'} />
                     </Form>
