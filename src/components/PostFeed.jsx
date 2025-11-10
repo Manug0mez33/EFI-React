@@ -6,7 +6,6 @@ import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import '../styles/PostFeed.css'
 import { useNavigate } from 'react-router-dom';        
 
 const CommentForm = ({ postId, token, onCommentAdded }) => {

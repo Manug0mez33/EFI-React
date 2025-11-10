@@ -1,17 +1,15 @@
-
-
 .post-feed {
-    background-color: rgb(74, 74, 156);
-    width: 100%;
     padding: 75px 250px;
-    margin: 0 auto;
-    box-sizing: border-box;
-    text-align: left;
-
 }
 
 .post-card {
     background-color: rgb(194, 239, 232);
     border: 5px solid rgb(182, 191, 50);
     margin-bottom: 75px;
+}
+
+.profile-page {
+    padding: 75px;
+    max-width: 600px;
+    margin: auto;
 }

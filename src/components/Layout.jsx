@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from 'react-router-dom';
 import { Menubar } from 'primereact/menubar';
 import { AuthContext } from '../context/AuthContext';
 import { Button } from 'primereact/button';
+import '../styles/Layout.css'
 
 export default function Layout() {
     const navigate = useNavigate();
@@ -25,7 +26,7 @@ export default function Layout() {
         {
             label: 'Mi Perfil',
             icon: 'pi pi-fw pi-user',
-            command: () => navigate('/perfil') 
+            command: () => navigate('/profile') 
         }
     ];
 

@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import CreatePostForm from "./components/CreatePostForm";
 import PostFeed from "./components/PostFeed";
 import Layout from "./components/Layout";
+import Profile from "./components/Profile";
 
 export default function App() {
   return (
@@ -15,6 +16,7 @@ export default function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/post" element={<CreatePostForm />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/category" />
       </Route>
     </Routes>
