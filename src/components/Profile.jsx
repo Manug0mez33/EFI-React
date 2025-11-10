@@ -157,7 +157,7 @@ export default function Profile() {
     }
 
     const title = urlParamId
-        ? `Editando Perfil de ${profileData.username}` 
+        ? `Perfil de ${profileData.username}` 
         : `Mi Perfil (${profileData.username})`;
     const cardFooter = (
         <div className='deactivate-button'>
@@ -173,7 +173,7 @@ export default function Profile() {
     )
 
     return (
-        <div className="profile-page" style={{ maxWidth: '600px', margin: 'auto' }}>
+        <div className="profile-page">
             <ConfirmDialog /> 
             <Card title={title} footer={cardFooter}>
                 <div className="profile-details">
