@@ -4,16 +4,19 @@ import RegisterForm from "./components/RegisterForm";
 import LoginForm from './components/LoginForm';
 import CreatePostForm from "./components/CreatePostForm";
 import PostFeed from "./components/PostFeed";
+import Layout from "./components/Layout";
 
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/posts" element={<PostFeed />} />
-      <Route path="/register" element={<RegisterForm />} />
-      <Route path="/login" element={<LoginForm />} />
-      <Route path="/post" element={<CreatePostForm />} />
-      <Route path="/category" />
+      <Route path="/" element={<Layout />} >
+        <Route index element={<Home />} />
+        <Route path="/posts" element={<PostFeed />} />
+        <Route path="/register" element={<RegisterForm />} />
+        <Route path="/login" element={<LoginForm />} />
+        <Route path="/post" element={<CreatePostForm />} />
+        <Route path="/category" />
+      </Route>
     </Routes>
   );
 }

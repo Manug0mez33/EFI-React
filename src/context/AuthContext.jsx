@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
             setUser(decoded)
             setToken(jwtToken)
 
-            toast.success('Inicio de sesion exitoso')
+            toast.success('Has iniciado sesion')
             return true
         } catch (error) {
             toast.error("Hubo un error al iniciar sesion", error.message)
@@ -64,10 +64,19 @@ export const AuthProvider = ({ children }) => {
         }
     }
 
+    const logout = () => {
+        localStorage.removeItem('token')
+        setUser(null)
+        setToken(null)
+        toast.success('Has cerrado sesion')
+    }
+
+
     return (
-        <AuthContext.Provider value={{ user, token, login }}>
+        <AuthContext.Provider value={{ user, token, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
 
 }
+

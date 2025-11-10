@@ -6,9 +6,10 @@ import { Button } from 'primereact/button';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
+import '../styles/PostFeed.css'
+import { useNavigate } from 'react-router-dom';        
 
 const CommentForm = ({ postId, token, onCommentAdded }) => {
-    
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         try {
             const response = await fetch(
@@ -65,24 +66,21 @@ const CommentForm = ({ postId, token, onCommentAdded }) => {
 export default function PostFeed() {
     const { user, token } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
-
+    const navigate = useNavigate();
     const fetchPosts = async () => {
         try {
             const response = await fetch('http://localhost:5000/post');
-            if (!response.ok) throw new Error('Error al cargar posts');
+            if (!response.ok) {
+                if (response.status === 429) {
+                    toast.error("Demasiados intentos.");
+                }
+                throw new Error('Error al cargar posts');
+            }
             
             const postData = await response.json(); 
 
-            const postsWithComments = await Promise.all(
-                postData.posts.map(async (post) => {
-                    const commentsResponse = await fetch(`http://localhost:5000/post/${post.id}/comments`);
-                    if (!commentsResponse.ok) throw new Error(`Error al cargar comentarios para el post ${post.id}`);
-                    
-                    const commentsData = await commentsResponse.json();
-                    return { ...post, comments: commentsData };
-                })
-            );
-            setPosts(postsWithComments.reverse()); 
+            setPosts(postData.posts.reverse());
+        
         } catch (error) {
             console.error(error);
             toast.error(error.message);
@@ -97,14 +95,14 @@ export default function PostFeed() {
         <div className="post-feed">
             {posts.map((post) => (
                 <Card 
+                    className="post-card" 
                     key={post.id} 
                     title={post.title} 
                     subTitle={`Por: ${post.user.username} - ${new Date(post.date_created).toLocaleDateString()}`}
-                    style={{ marginBottom: '2rem' }}
                 >
                     <p>{post.content}</p>
                     
-                    <div className="comments-section" style={{ marginTop: '1.5rem' }}>
+                    <div className="comments-section">
                         <h5>Comentarios:</h5>
                         {post.comments && post.comments.length > 0 ? (
                             post.comments.map((comment) => (
@@ -123,6 +121,13 @@ export default function PostFeed() {
                                 token={token} 
                                 onCommentAdded={fetchPosts} 
                             />
+                        )}
+
+                        {!user && !token && (
+                            <div className='extra-button'>
+                                <p>Inicia sesion para dejar un comentario.</p>
+                                <Button label='Iniciar sesion' onClick={() => navigate('/login')} icon='pi pi-sign-in'/>
+                            </div>
                         )}
                     </div>
                 </Card>
