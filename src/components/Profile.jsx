@@ -39,9 +39,9 @@ export default function Profile() {
 
     useEffect(() => {
         if (!user || !token) {
-            toast.error("Debes iniciar sesión para ver tu perfil.");
+            toast.error("Debes iniciar sesión para ver tu perfil.")
             navigate('/login')
-            return;
+            return
         }
 
         const profileIdToFetch = urlParamId || user.sub;
@@ -53,33 +53,34 @@ export default function Profile() {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                });
+                })
 
                 if (!response.ok) {
-                    throw new Error(err.error || 'No se pudo cargar el perfil');
+                    const err = await response.json()
+                    throw new Error(err.error || 'No se pudo cargar el perfil')
                 }
 
-                const data = await response.json();
+                const data = await response.json()
                 setProfileData(data); 
 
                 setSelectedRole(data.role);
 
             } catch (error) {
-                toast.error(error.message);
-                navigate('/'); 
+                toast.error(error.message)
+                navigate('/')
             } finally {
-                setIsLoading(false);
+                setIsLoading(false)
             }
         }
 
-        fetchProfile();
-    }, [user, token, navigate, urlParamId]);
+        fetchProfile()
+    }, [user, token, navigate, urlParamId])
 
     const handleRoleChange = async (e) => {
-        const newRole = e.value; 
-        setSelectedRole(newRole); 
+        const newRole = e.value
+        setSelectedRole(newRole)
 
-        const profileIdToUpdate = urlParamId || user.sub;
+        const profileIdToUpdate = urlParamId || user.sub
 
         try {
             const response = await fetch(`http://localhost:5000/users/${profileIdToUpdate}/role`, {
@@ -92,85 +93,101 @@ export default function Profile() {
             });
 
             if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || 'No se pudo actualizar el rol');
+                const err = await response.json()
+                throw new Error(err.error || 'No se pudo actualizar el rol')
             }
 
-            toast.success("Rol actualizado con éxito");
-            setProfileData(prev => ({ ...prev, role: newRole }));
+            toast.success("Rol actualizado con éxito")
+            setProfileData(prev => ({ ...prev, role: newRole }))
 
         } catch (error) {
-            toast.error(error.message);
-            setSelectedRole(profileData.role);
+            toast.error(error.message)
+            setSelectedRole(profileData.role)
         }
     };
 
-    const handleDeactivate = async () => {
+    if (isLoading) {
+        return <ProgressSpinner style={{ width: '50px', height: '50px', display: 'block', margin: 'auto' }} />
+    }
 
-        const profileIdToDeactivate = urlParamId || user.sub
+    if (!profileData) {
+        return <h2 style={{ textAlign: 'center' }}>No se pudo cargar el perfil.</h2>
+    }
+
+    const handleToggleStatus = async (newStatus) => {
+        const profileIdToToggle = urlParamId || user.sub
 
         try {
-            const response = await fetch(`http://localhost:5000/users/${profileIdToDeactivate}`, {
-                method: 'DELETE',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
+            const response = await fetch(`http://localhost:5000/users/${profileIdToToggle}/status`, {
+                method: 'PATCH',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({ is_active: newStatus })
+            })
 
             if (!response.ok) {
-                const err = await response.json();
-                throw new Error(err.error || 'No se pudo desactivar la cuenta');
+                const err = await response.json()
+                throw new Error(err.error || 'No se pudo cambiar el estado de la cuenta')
             }
             
-            toast.success("Cuenta desactivada.");
-            
-            if (profileIdToDeactivate === user.sub) {
+            const successMessage = newStatus ? 'Cuenta activada con éxito' : 'Cuenta desactivada con éxito'
+            toast.success(successMessage)
+
+            setProfileData(prev => ({ ...prev, is_active: newStatus }))
+        
+            if (newStatus === false && profileIdToToggle === user.sub) {
                 setTimeout(() => {
-                    logout();
-                    navigate('/');
-                }, 2000);
-            } else {
-                setProfileData(prev => ({ ...prev, is_active: false }));
+                    logout()
+                    navigate('/')
+                }, 2000)
             }
-            
+
         } catch (error) {
             toast.error(error.message)
         }
     };
 
-    const confirmDeactivation = () => {
+    const confirmToggleStatus = () => {
+        const currentlyActive = profileData.is_active
+
+        const message = currentlyActive ? 'Seguro que quieres desactivar esta cuenta?' : 'Seguro que quieres activar esta cuenta?'
+        const header = currentlyActive ? 'Desactivar Cuenta' : 'Activar Cuenta'
+        const acceptLabel = currentlyActive ? 'Desactivar' : 'Activar'
+
         confirmDialog({
-            message: '¿Estás seguro de que quieres desactivar esta cuenta? Esta acción es irreversible.',
-            header: 'Confirmar Desactivación',
+            message,
+            header,
             icon: 'pi pi-exclamation-triangle',
-            acceptLabel: 'Sí, desactivar',
-            rejectLabel: 'No, cancelar',
-            acceptClassName: 'p-button-danger',
-            accept: handleDeactivate, 
-        });
-    };
+            acceptLabel,
+            rejectLabel: 'Cancelar',
+            acceptClassName: currentlyActive ? 'p-button-danger' : 'p-button-success',
+            accept: () => {
+                handleToggleStatus(!currentlyActive)
+            }
+        })
 
-    if (isLoading) {
-        return <ProgressSpinner style={{ width: '50px', height: '50px', display: 'block', margin: 'auto' }} />;
-    }
-
-    if (!profileData) {
-        return <h2 style={{ textAlign: 'center' }}>No se pudo cargar el perfil.</h2>;
     }
 
     const title = urlParamId
-        ? `Perfil de ${profileData.username}` 
-        : `Mi Perfil (${profileData.username})`;
+        ? `Perfil de: ${profileData.username}` 
+        : `Mi Perfil: ${profileData.username}`
+
     const cardFooter = (
-        <div className='deactivate-button'>
+        <div style={{ marginTop: '2rem', borderTop: '1px solid #ddd', paddingTop: '1rem' }}>
             {user && user.role === 'admin' && (
                 <Button 
-                    label="Desactivar esta cuenta" 
-                    icon="pi pi-exclamation-triangle" 
-                    severity="danger" 
-                    onClick={confirmDeactivation} 
+                    label={profileData.is_active ? "Desactivar Cuenta" : "Activar Cuenta"} 
+                    icon={profileData.is_active ? "pi pi-times-circle" : "pi pi-check-circle"} 
+                    severity={profileData.is_active ? "danger" : "success"}
+                    onClick={confirmToggleStatus}
                 />
             )}
         </div>
-    )
+    );
+
+
 
     return (
         <div className="profile-page">
@@ -178,6 +195,7 @@ export default function Profile() {
             <Card title={title} footer={cardFooter}>
                 <div className="profile-details">
                     <p><strong>ID de Usuario:</strong> {profileData.id}</p>
+                    <p><strong>Nombre de Usuario:</strong> {profileData.username}</p>
                     <p><strong>Email:</strong> {profileData.email}</p>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
                         <strong style={{ marginRight: '1rem' }}>Rol:</strong>
