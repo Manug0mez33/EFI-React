@@ -13,3 +13,12 @@
     max-width: 600px;
     margin: auto;
 }
+
+.users-list-page {
+    padding: 75px;;
+}
+
+.deactivate-button {
+    border-top: 1px solid #ddd;
+    padding-top: 1rem;
+}

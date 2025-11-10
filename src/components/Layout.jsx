@@ -30,6 +30,14 @@ export default function Layout() {
         }
     ];
 
+        if (user && user.role === 'admin') {
+        userItems.push({
+            label: 'Usuarios',
+            icon: 'pi pi-fw pi-users',
+            command: () => navigate('/users')
+        });
+    }
+    
     const items = [
         {
             label: 'Inicio',
@@ -38,6 +46,7 @@ export default function Layout() {
         },
         ...(user ? userItems : guestItems)
     ];
+
 
     const end = user ? (
         <Button 
