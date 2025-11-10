@@ -7,6 +7,7 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';        
+import { Tag } from 'primereact/tag';
 
 const CommentForm = ({ postId, token, onCommentAdded }) => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -78,7 +79,7 @@ export default function PostFeed() {
             
             const postData = await response.json(); 
 
-            setPosts(postData.posts.reverse());
+            setPosts(postData.posts);
         
         } catch (error) {
             console.error(error);
@@ -101,6 +102,16 @@ export default function PostFeed() {
                 >
                     <p>{post.content}</p>
                     
+                    <div className="categories-tags" style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {post.categories_data && post.categories_data.map((category) => (
+                            <Tag 
+                                key={category.id} 
+                                value={category.name} 
+                                severity="info"
+                            />
+                        ))}
+                    </div>
+
                     <div className="comments-section">
                         <h5>Comentarios:</h5>
                         {post.comments && post.comments.length > 0 ? (

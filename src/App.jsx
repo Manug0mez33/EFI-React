@@ -6,7 +6,8 @@ import CreatePostForm from "./components/CreatePostForm";
 import PostFeed from "./components/PostFeed";
 import Layout from "./components/Layout";
 import Profile from "./components/Profile";
-import Users from "./components/Users"
+import Users from "./components/Users";
+import CategoryManager from "./components/CategoryManager";
 
 export default function App() {
   return (
@@ -19,8 +20,8 @@ export default function App() {
         <Route path="/post" element={<CreatePostForm />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
-        <Route path="/users" element={<Users/>}/>
-        <Route path="/category" />
+        <Route path="/users" element={<Users/>} />
+        <Route path="/category" element={<CategoryManager/>} />
       </Route>
     </Routes>
   );

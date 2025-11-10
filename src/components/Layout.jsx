@@ -27,6 +27,12 @@ export default function Layout() {
             label: 'Mi Perfil',
             icon: 'pi pi-fw pi-user',
             command: () => navigate('/profile') 
+        },
+
+        {
+            label: 'Crear Post',
+            icon: 'pi pi-fw pi-plus',
+            command: () => navigate('/post')
         }
     ];
 
@@ -38,6 +44,15 @@ export default function Layout() {
         });
     }
     
+        if (user && (user.role === 'admin' || user.role === 'moderator')) {
+            userItems.push({
+                label: 'Categorías',
+                icon: 'pi pi-fw pi-list',
+                command: () => navigate('/category')
+            });
+        }
+
+
     const items = [
         {
             label: 'Inicio',
