@@ -8,3 +8,30 @@
   width: 100%;
 }
 
+.index-button {
+  background-color: #494444;
+  border: 1px solid #494444;    
+}
+
+.index-button:hover {
+  background-color: #d7d961;
+  border: 1px solid #494444;
+  color: #494444;
+} 
+
+.home-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 25%;
+}
+
+.home-logo {
+  cursor: pointer;
+}
+
+.home-logo:hover {
+    transform: scale(1.05);
+    transition: transform 0.5s;
+}

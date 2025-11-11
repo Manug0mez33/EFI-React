@@ -19,7 +19,21 @@ export default function Home() {
 
     return (
         <div className="home-container">
-            <img className="home-logo" src={logo} alt="" />
+            <img className="home-logo" src={logo} alt="Logo" onClick={()=> navigate('/posts')} />
+            <div className="home-content">
+                <Button
+                className="index-button"
+                onClick={()=> navigate('/login')}
+                label="Iniciar Sesión"
+                icon="pi pi-sign-in"
+            />
+            <Button
+                className="index-button"
+                onClick={()=> navigate('/register')}
+                label="Registrarse"
+                icon="pi pi-sign-in"
+            />
+            </div>
         </div>
     );
 }

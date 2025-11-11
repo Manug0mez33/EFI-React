@@ -213,3 +213,25 @@ html, body, #root {
     border: 1px solid #494444;
     color: #494444;
 }
+
+.extra-button {
+    background-color: #494444;
+    border: 1px solid #4944
+}
+
+.extra-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}
+
+.register-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.register-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}      

@@ -136,9 +136,9 @@ export default function PostFeed() {
                         )}
 
                         {!user && !token && (
-                            <div className='extra-button'>
+                            <div>
                                 <p>Inicia sesion para dejar un comentario.</p>
-                                <Button label='Iniciar sesion' onClick={() => navigate('/login')} icon='pi pi-sign-in'/>
+                                <Button label='Iniciar sesion' className='extra-button' onClick={() => navigate('/login')} icon='pi pi-sign-in'/>
                             </div>
                         )}
                     </div>

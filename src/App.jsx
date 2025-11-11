@@ -12,8 +12,8 @@ import CategoryManager from "./components/CategoryManager";
 export default function App() {
   return (
     <Routes>
+      <Route index element={<Home />} />
       <Route path="/" element={<Layout />} >
-        <Route index element={<Home />} />
         <Route path="/posts" element={<PostFeed />} />
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />

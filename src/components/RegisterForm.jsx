@@ -30,7 +30,7 @@ export default function RegisterForm() {
             if (response.ok) {
                 toast.success("Usuario registrado con exito")
                 resetForm()
-                setTimeout(() => navigate('/'), 2000)
+                setTimeout(() => navigate('/posts'), 2000)
             } else {
                 toast.error("Hubo un erro al registrar el usuario")
             }
@@ -75,7 +75,7 @@ export default function RegisterForm() {
                             <Field as={Dropdown} id='role' name='role' options={roles} optionLabel='label' optionValue='value'/>
                             <ErrorMessage name='role' component='small' className='error' />
                         </div>
-                        <Button type='submit' label={isSubmitting ? "Registrando..." : 'Registrarse'} />
+                        <Button type='submit' className='register-button' label={isSubmitting ? "Registrando..." : 'Registrarse'} />
                     </Form>
                 )}
             </Formik>
