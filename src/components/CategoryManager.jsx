@@ -103,7 +103,7 @@ export default function CategoryManager() {
             icon: 'pi pi-exclamation-triangle',
             acceptLabel: 'Sí, eliminar',
             acceptClassName: 'p-button-danger',
-            accept: () => handleDelete(category.id)
+            accept: () => handleDelete(category.id),
         });
     };
 
@@ -125,9 +125,9 @@ export default function CategoryManager() {
     const actionBodyTemplate = (rowData) => {
         return (
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-                <Button icon="pi pi-pencil" className="p-button-sm p-button-info" onClick={() => openEditDialog(rowData)} />
+                <Button icon="pi pi-pencil" className="p-button-sm p-button-info button-edit" onClick={() => openEditDialog(rowData)} />
                 {user.role === 'admin' && ( 
-                    <Button icon="pi pi-trash" className="p-button-sm p-button-danger" onClick={() => confirmDelete(rowData)} />
+                    <Button icon="pi pi-trash" className="p-button-sm p-button-danger button-delete" onClick={() => confirmDelete(rowData)} />
                 )}
             </div>
         );
@@ -140,7 +140,7 @@ export default function CategoryManager() {
         <div className="category-manager" style={{ display: 'flex', gap: '2rem', padding: '1rem' }}>
             <ConfirmDialog />
             
-            <Card title="Crear Nueva Categoría" style={{ flex: 1, height: 'fit-content' }}>
+            <Card className="create-category" title="Crear Nueva Categoría" style={{ flex: 1, height: 'fit-content' }}>
                 <Formik initialValues={{ name: '' }} validationSchema={validationSchema} onSubmit={handleCreate}>
                     {({ isSubmitting }) => (
                         <Form>
@@ -149,17 +149,18 @@ export default function CategoryManager() {
                                 <Field as={InputText} id="name" name="name" className="w-full" />
                                 <ErrorMessage name="name" component="small" className="p-error" />
                             </div>
-                            <Button type="submit" label={isSubmitting ? "Creando..." : "Crear"} disabled={isSubmitting} />
+                            <Button type="submit" className='create-button' label={isSubmitting ? "Creando..." : "Crear"} disabled={isSubmitting} />
                         </Form>
                     )}
                 </Formik>
             </Card>
 
-            <Card title="Categorías Existentes" style={{ flex: 2 }}>
+            <Card className="category-list" title="Categorías Existentes" style={{ flex: 2 }}>
                 <DataTable 
                     value={categories} 
                     scrollable 
                     scrollHeight="700px"
+                    className='category-table'
                 >
                     <Column field="id" header="ID" sortable />
                     <Column field="name" header="Nombre" sortable />
@@ -181,7 +182,7 @@ export default function CategoryManager() {
                                     <Field as={InputText} id="edit_name" name="name" className="w-full" />
                                     <ErrorMessage name="name" component="small" className="p-error" />
                                 </div>
-                                <Button type="submit" label={isSubmitting ? "Guardando..." : "Guardar Cambios"} />
+                                <Button className='edit-button' type="submit" label={isSubmitting ? "Guardando..." : "Guardar Cambios"} />
                             </Form>
                         )}
                     </Formik>

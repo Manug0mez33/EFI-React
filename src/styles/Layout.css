@@ -1,24 +1,215 @@
+html, body, #root {
+    height: 100%;
+    min-height: 100%;
+    margin: 0;
+    background-color: #d7d961;
+}
+
+.p-datatable .p-datatable-wrapper,
+.p-datatable-scrollable-body,
+.p-datatable-thead > tr > th,
+.p-datatable-tbody > tr > td {
+    background-color: transparent !important;
+}
+
+.main-menubar {
+    background-color: #494444;
+    border: 0;
+    border-radius: 0;
+}
+
+.main-menubar .p-button.p-button-text {
+    color: #f6eeee;
+    background-color: #494444;
+    border-radius: 50%;
+}
+
+.main-menubar .p-button.p-button-text:hover {
+    border-radius: 15px;
+    color: #f52222;
+}
+
+.main-menubar .p-menuitem-link:hover .p-menuitem-icon {
+    color: #4d4747;
+}
+
+.main-menubar .p-menuitem-link .p-menuitem-text {
+    color: #ddd;
+}
+
+.main-menubar .p-menuitem-link:hover .p-menuitem-text {
+    color: #4d4747;
+}
+
 .post-feed {
-    padding: 75px 250px;
+    background-color: #d7d961;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 75px;  
 }
 
 .post-card {
-    background-color: rgb(194, 239, 232);
-    border: 5px solid rgb(182, 191, 50);
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    background-color: #e3e9d6;
+    color: rgb(41, 26, 26);
+    border: 5px solid #494444;
+    border-radius: 33px;
     margin-bottom: 75px;
 }
 
+.post-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.post-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}
+
+.card-profile {
+    background-color: #e3e9d6;
+    border: 5px solid #494444;
+    border-radius: 10px;;
+}
+
+.profile-details {
+    color: black;
+    display: flex;
+    flex-direction: column;
+}
+
+.deac-ac-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.deac-ac-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}
+
 .profile-page {
-    padding: 75px;
-    max-width: 600px;
+    display: flex;
+    justify-content: center;
+    padding: 175px 75px;
+    max-width: 500px;
     margin: auto;
 }
 
+
+
+.post-content-container {
+    padding-top: 75px
+}
+
+.post-container {
+    border: 5px solid #494444;
+    border-radius: 10px;
+    background-color: #e3e9d6;
+    color: black;
+}
+
 .users-list-page {
-    padding: 75px;;
+    padding: 75px;
+}
+
+.users-list-content {
+    border: 5px solid #494444;
+    border-radius: 10px;
+    background-color: #e3e9d6;
+    color: black;
 }
 
 .deactivate-button {
     border-top: 1px solid #ddd;
     padding-top: 1rem;
+}
+
+.category-tag {
+    background-color: #494444;
+}
+
+.send-comment-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.send-comment-button:hover {
+    background-color: #d7d961;
+    color: #494444;
+    border: 1px solid #494444;
+}
+
+.main-logo {
+    padding-left: 20px;
+    padding-top: 5px;
+    padding-right: 10px;
+}
+
+.login-container {
+    border: 5px solid #494444;
+    border-radius: 10px;
+    background-color: #e3e9d6;
+    color: black;
+}
+
+.register-container {
+    border: 5px solid #494444;
+    border-radius: 10px;
+    background-color: #e3e9d6;
+    color: black;
+}   
+
+.create-category {
+    border: 5px solid #494444;
+    border-radius: 10px;
+    background-color: #e3e9d6;
+    color: black;
+}
+
+.category-list {
+    border: 5px solid #494444;
+    border-radius: 10px;
+    background-color: #e3e9d6;
+    color: black;
+}
+
+.create-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.create-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}
+
+.edit-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.edit-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}
+
+.p-button-sm {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.p-button-sm:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
 }

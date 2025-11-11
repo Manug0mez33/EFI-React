@@ -8,6 +8,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';        
 import { Tag } from 'primereact/tag';
+import logo from '../assets/logoblanco.png'
 
 const CommentForm = ({ postId, token, onCommentAdded }) => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -55,7 +56,7 @@ const CommentForm = ({ postId, token, onCommentAdded }) => {
                         autoResize
                         style={{ flex: 1 }}
                     />
-                    <Button type="submit" label="Comentar" disabled={isSubmitting} />
+                    <Button type="submit" label="Comentar" className='send-comment-button' disabled={isSubmitting} />
                 </Form>
             )}
         </Formik>
@@ -107,7 +108,8 @@ export default function PostFeed() {
                             <Tag 
                                 key={category.id} 
                                 value={category.name} 
-                                severity="info"
+                                severity="warning"
+                                className='category-tag'
                             />
                         ))}
                     </div>

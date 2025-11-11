@@ -4,6 +4,7 @@ import { Menubar } from 'primereact/menubar';
 import { AuthContext } from '../context/AuthContext';
 import { Button } from 'primereact/button';
 import '../styles/Layout.css'
+import logo from '../assets/logoblanco.png'
 
 export default function Layout() {
     const navigate = useNavigate();
@@ -62,10 +63,18 @@ export default function Layout() {
         ...(user ? userItems : guestItems)
     ];
 
+    const start = (
+        <img
+            alt='Logo'
+            src={logo}
+            height='40'
+            className='mr-2 main-logo'
+        />
+    )
 
     const end = user ? (
         <Button 
-            label="Cerrar Sesión" 
+            label="" 
             icon="pi pi-sign-out" 
             className="p-button-text" 
             onClick={() => {
@@ -77,7 +86,7 @@ export default function Layout() {
 
     return (
         <div>
-            <Menubar model={items} end={end} />
+            <Menubar model={items} start={start} end={end} className='main-menubar'/>
             <div className="content-container">
                 <Outlet />
             </div>

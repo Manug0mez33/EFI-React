@@ -8,7 +8,6 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import { Tag } from 'primereact/tag';
 import { Card } from 'primereact/card';
 import { Button } from 'primereact/button';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 export default function Users() {
     const { user, token } = useContext(AuthContext);
@@ -89,8 +88,8 @@ export default function Users() {
 
     return (
         <div className="users-list-page">
-            <Card title="Panel de Administración de Usuarios">
-                <DataTable value={users} paginator rows={10}>
+            <Card title="Panel de Administración de Usuarios" className='users-list-content'>
+                <DataTable value={users} scrollable scrollHeight="600px" className='users-table'>
                     <Column field="id" header="ID" sortable />
                     <Column field="username" header="Usuario" sortable />
                     <Column field="email" header="Email" />

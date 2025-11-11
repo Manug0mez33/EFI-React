@@ -1,17 +1,25 @@
 import { Button } from "primereact/button";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
 import "../styles/Home.css";
+import logo from '../assets/logoposteonegro.png'
+
 
 export default function Home() {
     const navigate = useNavigate();
 
+    const { user } = useContext(AuthContext);
+
+    useEffect(() => {
+        if (user) {
+            navigate("/posts");
+        }
+    }, [user, navigate]);
+
     return (
         <div className="home-container">
-            <h1>Bienvenido</h1>
-            <div className="home-buttons">
-                <Button label="Registrarse" onClick={() => navigate("/register")} />
-                <Button label="Iniciar sesión" onClick={() => navigate("/login")} />
-            </div>
+            <img className="home-logo" src={logo} alt="" />
         </div>
     );
 }

@@ -9,6 +9,7 @@ import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { Dropdown } from 'primereact/dropdown';
 import { Tag } from 'primereact/tag';
 
+
 const roleOptions = [
     { label: 'Usuario', value: 'user' },
     { label: 'Administrador', value: 'admin' },
@@ -178,6 +179,7 @@ export default function Profile() {
         <div style={{ marginTop: '2rem', borderTop: '1px solid #ddd', paddingTop: '1rem' }}>
             {user && user.role === 'admin' && (
                 <Button 
+                    className='deac-ac-button'
                     label={profileData.is_active ? "Desactivar Cuenta" : "Activar Cuenta"} 
                     icon={profileData.is_active ? "pi pi-times-circle" : "pi pi-check-circle"} 
                     severity={profileData.is_active ? "danger" : "success"}
@@ -190,34 +192,36 @@ export default function Profile() {
 
 
     return (
-        <div className="profile-page">
-            <ConfirmDialog /> 
-            <Card title={title} footer={cardFooter}>
-                <div className="profile-details">
-                    <p><strong>ID de Usuario:</strong> {profileData.id}</p>
-                    <p><strong>Nombre de Usuario:</strong> {profileData.username}</p>
-                    <p><strong>Email:</strong> {profileData.email}</p>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
-                        <strong style={{ marginRight: '1rem' }}>Rol:</strong>
-                        {user && user.role === 'admin' ? (
-                            <Dropdown 
-                                value={selectedRole}
-                                options={roleOptions}
-                                onChange={handleRoleChange} 
-                                optionLabel="label"
-                                optionValue="value"
-                            />
-                        ) : (
-                            roleTag(profileData.role)
-                        )}
+        <div className="profile-container">
+            <div className="profile-page">
+                <ConfirmDialog /> 
+                <Card title={title} footer={cardFooter} className='card-profile'>
+                    <div className="profile-details">
+                        <p><strong>ID de Usuario:</strong> {profileData.id}</p>
+                        <p><strong>Nombre de Usuario:</strong> {profileData.username}</p>
+                        <p><strong>Email:</strong> {profileData.email}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+                            <strong style={{ marginRight: '1rem' }}>Rol:</strong>
+                            {user && user.role === 'admin' ? (
+                                <Dropdown 
+                                    value={selectedRole}
+                                    options={roleOptions}
+                                    onChange={handleRoleChange} 
+                                    optionLabel="label"
+                                    optionValue="value"
+                                />
+                            ) : (
+                                roleTag(profileData.role)
+                            )}
+                        </div>
+                        
+                        <p><strong>Estado:</strong> {profileData.is_active ? 
+                            <span style={{ color: 'green' }}>Activo</span> : 
+                            <span style={{ color: 'red' }}>Inactivo</span>
+                        }</p>
                     </div>
-                    
-                    <p><strong>Estado:</strong> {profileData.is_active ? 
-                        <span style={{ color: 'green' }}>Activo</span> : 
-                        <span style={{ color: 'red' }}>Inactivo</span>
-                    }</p>
-                </div>
-            </Card>
+                </Card>
+            </div>
         </div>
     )
 }

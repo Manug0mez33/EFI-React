@@ -74,46 +74,48 @@ export default function CreatePostForm() {
     };
 
     return (
-        <div className="post-container">
-            <h3>Crear un nuevo post</h3>
-            <Formik
-                initialValues={{ title: '', content: '', categories: [] }}
-                validationSchema={validationSchema}
-                onSubmit={handleSubmit}
-            >
-                {({ isSubmitting }) => (
-                    <Form className="post-form">
-                        <div className="form-field">
-                            <label htmlFor="title">Título</label>
-                            <Field as={InputText} id="title" name="title" className="w-full" />
-                            <ErrorMessage name="title" component="small" className="p-error" />
-                        </div>
+        <div className='post-content-container'>
+            <div className="post-container">
+                <h3>Crear un nuevo post</h3>
+                <Formik
+                    initialValues={{ title: '', content: '', categories: [] }}
+                    validationSchema={validationSchema}
+                    onSubmit={handleSubmit}
+                >
+                    {({ isSubmitting }) => (
+                        <Form className="post-form">
+                            <div className="form-field">
+                                <label htmlFor="title">Título</label>
+                                <Field as={InputText} id="title" name="title" className="w-full" />
+                                <ErrorMessage name="title" component="small" className="p-error" />
+                            </div>
 
-                        <div className="form-field">
-                            <label htmlFor="content">Contenido</label>
-                            <Field as={InputTextarea} id="content" name="content" rows={5} className="w-full" />
-                            <ErrorMessage name="content" component="small" className="p-error" />
-                        </div>
+                            <div className="form-field">
+                                <label htmlFor="content">Contenido</label>
+                                <Field as={InputTextarea} id="content" name="content" rows={5} className="w-full" />
+                                <ErrorMessage name="content" component="small" className="p-error" />
+                            </div>
 
-                        <div className="form-field">
-                            <label htmlFor="categories">Categorías</label>
-                            <Field 
-                                as={MultiSelect}
-                                id="categories"
-                                name="categories"
-                                options={categories} 
-                                optionLabel="name"
-                                optionValue="id"
-                                placeholder="Selecciona categorías"
-                                className="w-full"
-                            />
-                            <ErrorMessage name="categories" component="small" className="p-error" />
-                        </div>
+                            <div className="form-field">
+                                <label htmlFor="categories">Categorías</label>
+                                <Field 
+                                    as={MultiSelect}
+                                    id="categories"
+                                    name="categories"
+                                    options={categories} 
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    placeholder="Selecciona categorías"
+                                    className="w-full"
+                                />
+                                <ErrorMessage name="categories" component="small" className="p-error" />
+                            </div>
 
-                        <Button type="submit" label={isSubmitting ? "Posteando..." : "Postear"} disabled={isSubmitting} />
-                    </Form>
-                )}
-            </Formik>
+                            <Button type="submit" className='post-button' label={isSubmitting ? "Posteando..." : "Postear"} disabled={isSubmitting} />
+                        </Form>
+                    )}
+                </Formik>
+            </div>
         </div>
     );
 }
