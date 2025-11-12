@@ -7,8 +7,8 @@ import '../styles/Layout.css'
 import logo from '../assets/logoblanco.png'
 
 export default function Layout() {
-    const navigate = useNavigate();
-    const { user, logout } = useContext(AuthContext);
+    const navigate = useNavigate()
+    const { user, logout } = useContext(AuthContext)
 
     const guestItems = [
         {
@@ -21,7 +21,7 @@ export default function Layout() {
             icon: 'pi pi-fw pi-sign-in',
             command: () => navigate('/login')
         }
-    ];
+    ]
 
     const userItems = [
         {
@@ -35,14 +35,14 @@ export default function Layout() {
             icon: 'pi pi-fw pi-plus',
             command: () => navigate('/post')
         }
-    ];
+    ]
 
         if (user && user.role === 'admin') {
         userItems.push({
             label: 'Usuarios',
             icon: 'pi pi-fw pi-users',
             command: () => navigate('/users')
-        });
+        })
     }
     
         if (user && (user.role === 'admin' || user.role === 'moderator')) {
@@ -50,13 +50,13 @@ export default function Layout() {
                 label: 'Categorías',
                 icon: 'pi pi-fw pi-list',
                 command: () => navigate('/category')
-            });
+            })
 
             userItems.push({
                 label: 'Estadísticas',
                 icon: 'pi pi-fw pi-chart-bar',
                 command: () => navigate('/stats')
-            });
+            })
         }
 
 
@@ -67,7 +67,7 @@ export default function Layout() {
             command: () => navigate('/posts')
         },
         ...(user ? userItems : guestItems)
-    ];
+    ]
 
     const start = (
         <img
@@ -84,11 +84,11 @@ export default function Layout() {
             icon="pi pi-sign-out" 
             className="p-button-text" 
             onClick={() => {
-                logout();
-                navigate('/');
+                logout()
+                navigate('/')
             }} 
         />
-    ) : null;
+    ) : null
 
     return (
         <div>
@@ -97,5 +97,5 @@ export default function Layout() {
                 <Outlet />
             </div>
         </div>
-    );
+    )
 }

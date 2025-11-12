@@ -7,15 +7,15 @@ import logo from '../assets/logoposteonegro.png'
 
 
 export default function Home() {
-    const navigate = useNavigate();
+    const navigate = useNavigate()
 
-    const { user } = useContext(AuthContext);
+    const { user } = useContext(AuthContext)
 
     useEffect(() => {
         if (user) {
-            navigate("/posts");
+            navigate("/posts")
         }
-    }, [user, navigate]);
+    }, [user, navigate])
 
     return (
         <div className="home-container">

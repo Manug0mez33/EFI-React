@@ -43,7 +43,7 @@ export default function CategoryManager() {
         } finally {
             setIsLoading(false)
         }
-    };
+    }
 
     useEffect(() => {
         fetchCategories()
@@ -130,8 +130,8 @@ export default function CategoryManager() {
                     <Button icon="pi pi-trash" className="p-button-sm p-button-danger button-delete" onClick={() => confirmDelete(rowData)} />
                 )}
             </div>
-        );
-    };
+        )
+    }
 
     if (isLoading) return <ProgressSpinner style={{ width: '50px', height: '50px', display: 'block', margin: 'auto' }} />
     if (!user || (user.role !== 'admin' && user.role !== 'moderator')) return null
@@ -189,5 +189,5 @@ export default function CategoryManager() {
                 )}
             </Dialog>
         </div>
-    );
+    )
 }

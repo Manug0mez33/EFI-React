@@ -23,22 +23,22 @@ const CommentForm = ({ postId, token, onCommentAdded }) => {
                     },
                     body: JSON.stringify({ content: values.content })
                 }
-            );
+            )
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || 'Error al comentar');
+                const errorData = await response.json()
+                throw new Error(errorData.error || 'Error al comentar')
             }
 
-            toast.success("Comentario añadido");
-            resetForm();
-            onCommentAdded(); 
+            toast.success("Comentario añadido")
+            resetForm()
+            onCommentAdded()
         } catch (error) {
-            toast.error(error.message);
-            console.error(error);
+            toast.error(error.message)
+            console.error(error)
         }
-        setSubmitting(false);
-    };
+        setSubmitting(false)
+    }
 
     return (
         <Formik
@@ -60,69 +60,69 @@ const CommentForm = ({ postId, token, onCommentAdded }) => {
                 </Form>
             )}
         </Formik>
-    );
-};
+    )
+}
 
 
 export default function PostFeed() {
-    const { user, token } = useContext(AuthContext);
-    const [posts, setPosts] = useState([]);
-    const navigate = useNavigate();
+    const { user, token } = useContext(AuthContext)
+    const [posts, setPosts] = useState([])
+    const navigate = useNavigate()
 
     const [editingId, setEditingId] = useState(null)
     const [editContent, setEditContent] =useState('')
 
     const fetchPosts = async () => {
         try {
-            const response = await fetch('http://localhost:5000/post');
+            const response = await fetch('http://localhost:5000/post')
             if (!response.ok) {
                 if (response.status === 429) {
-                    toast.error("Demasiados intentos.");
+                    toast.error("Demasiados intentos.")
                 }
-                throw new Error('Error al cargar posts');
+                throw new Error('Error al cargar posts')
             }
             
-            const postData = await response.json(); 
+            const postData = await response.json()
 
-            setPosts(postData.posts);
+            setPosts(postData.posts)
         
         } catch (error) {
-            console.error(error);
-            toast.error(error.message);
+            console.error(error)
+            toast.error(error.message)
         }
-    };
+    }
 
     useEffect(() => {
-        fetchPosts();
-    }, []);
+        fetchPosts()
+    }, [])
 
     const handleDeletePost = async (postId) => {
         try {
             const response = await fetch(`http://localhost:5000/post/${postId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (!response.ok) throw new Error('No se pudo eliminar el post');
-            toast.success('Post eliminado');
-            fetchPosts(); // Recarga todos los posts
+            })
+            if (!response.ok) throw new Error('No se pudo eliminar el post')
+            toast.success('Post eliminado')
+            fetchPosts()
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         }
-    };
+    }
 
     const handleDeleteComment = async (commentId) => {
         try {
             const response = await fetch(`http://localhost:5000/comments/${commentId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (!response.ok) throw new Error('No se pudo eliminar el comentario');
-            toast.success('Comentario eliminado');
-            fetchPosts(); // Recarga los posts para actualizar la lista de comentarios
+            })
+            if (!response.ok) throw new Error('No se pudo eliminar el comentario')
+            toast.success('Comentario eliminado')
+            fetchPosts()
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         }
-    };
+    }
 
     const confirmDeletePost = (postId) => {
         confirmDialog({
@@ -132,8 +132,8 @@ export default function PostFeed() {
             acceptLabel: 'Sí, eliminar',
             acceptClassName: 'p-button-danger',
             accept: () => handleDeletePost(postId)
-        });
-    };
+        })
+    }
 
     const confirmDeleteComment = (commentId) => {
         confirmDialog({
@@ -143,8 +143,8 @@ export default function PostFeed() {
             acceptLabel: 'Sí, eliminar',
             acceptClassName: 'p-button-danger',
             accept: () => handleDeleteComment(commentId)
-        });
-    };
+        })
+    }
 
     const startEdit = (comment) => {
         setEditingId(comment.id)
@@ -184,9 +184,9 @@ export default function PostFeed() {
             <ConfirmDialog />
 
             {posts.map((post) => {
-                const isAdmin = user && user.role === 'admin';
-                const isMod = user && user.role === 'moderator';
-                const isPostOwner = user && parseInt(user.sub) === post.user.id;
+                const isAdmin = user && user.role === 'admin'
+                const isMod = user && user.role === 'moderator'
+                const isPostOwner = user && parseInt(user.sub) === post.user.id
 
                 return (
                     <Card 
@@ -230,9 +230,9 @@ export default function PostFeed() {
                             {post.comments && post.comments.length > 0 ? (
                                 post.comments.map((comment) => {
                                     
-                                    const isCommentOwner = user && parseInt(user.sub) === comment.user.id;
-                                    const canDeleteComment = isAdmin || isMod || isCommentOwner;
-                                    const canEditComment = isCommentOwner;
+                                    const isCommentOwner = user && parseInt(user.sub) === comment.user.id
+                                    const canDeleteComment = isAdmin || isMod || isCommentOwner
+                                    const canEditComment = isCommentOwner
 
                                     return (
                                         <div 
@@ -290,7 +290,7 @@ export default function PostFeed() {
                                                 </div>
                                             )}
                                         </div>
-                                    );
+                                    )
                                 })
                             ) : (
                                 <p>No hay comentarios. ¡Sé el primero!</p>
@@ -311,8 +311,8 @@ export default function PostFeed() {
                             )}
                         </div>
                     </Card>
-                );
+                )
             })}
         </div>
-    );
+    )
 }

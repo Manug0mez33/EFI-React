@@ -15,77 +15,77 @@ const validationSchema = Yup.object({
     title: Yup.string().required('El título es obligatorio'),
     content: Yup.string().required('El contenido es obligatorio'),
     categories: Yup.array().min(1, 'Debes seleccionar al menos una categoría')
-});
+})
 
 export default function CreatePostForm() {
-    const { token } = useContext(AuthContext);
+    const { token } = useContext(AuthContext)
     const navigate = useNavigate()
 
     const { postId } = useParams()
     const isEditMode = Boolean(postId)
 
-    const [categories, setCategories] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [categories, setCategories] = useState([])
+    const [isLoading, setIsLoading] = useState(false)
 
     const [initialValues, setInitialValues] = useState({
         title: '',
         content: '',
         categories: []
-    });
+    })
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:5000/category');
+                const response = await fetch('http://localhost:5000/category')
 
                 if (!response.ok) {
-                    throw new Error('No se pudieron cargar las categorías');
+                    throw new Error('No se pudieron cargar las categorías')
                 }
-                const data = await response.json();
-                setCategories(data);
+                const data = await response.json()
+                setCategories(data)
             } catch (error) {
-                toast.error(error.message);
-                console.error(error);
+                toast.error(error.message)
+                console.error(error)
             }
-        };
-        fetchCategories();
-    }, []);
+        }
+        fetchCategories()
+    }, [])
 
     useEffect(() => {
         if (isEditMode) {
             const fetchPostData = async () => {
                 try {
-                    const response = await fetch(`http://localhost:5000/post/${postId}`);
+                    const response = await fetch(`http://localhost:5000/post/${postId}`)
                     if (!response.ok) {
-                        throw new Error('No se pudo cargar el post');
+                        throw new Error('No se pudo cargar el post')
                     }
-                    const postData = await response.json();
+                    const postData = await response.json()
                     setInitialValues({
                         title: postData.title,
                         content: postData.content,
                         categories: postData.categories_data.map(category => category.id)
-                    });
+                    })
                 } catch (error) {
                     toast.error(error.message)
                     navigate('/posts')
                 } finally {
-                    setIsLoading(false);
+                    setIsLoading(false)
                 }
-            };
-            fetchPostData();
+            }
+            fetchPostData()
         } 
     }, [isEditMode, postId, navigate])
                 
 
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         if (!token) {
-            toast.error("Debes iniciar sesión para postear");
-            setSubmitting(false);
-            return;
+            toast.error("Debes iniciar sesión para postear")
+            setSubmitting(false)
+            return
         }
 
-        const url = isEditMode ? `http://localhost:5000/post/${postId}` : 'http://localhost:5000/post';
-        const method = isEditMode ? 'PUT' : 'POST';
+        const url = isEditMode ? `http://localhost:5000/post/${postId}` : 'http://localhost:5000/post'
+        const method = isEditMode ? 'PUT' : 'POST'
 
         try {
             const response = await fetch(url, {
@@ -96,21 +96,21 @@ export default function CreatePostForm() {
                     },
                     body: JSON.stringify(values) 
                 }
-            );
+            )
 
             if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData.error || errorData.message || 'Error al crear el post');
+                const errorData = await response.json()
+                throw new Error(errorData.error || errorData.message || 'Error al crear el post')
             }
 
-            toast.success(isEditMode ? "Post actualizado" : "Post creado");
+            toast.success(isEditMode ? "Post actualizado" : "Post creado")
             setTimeout(() => navigate('/posts'), 2000) 
         } catch (error) {
-            toast.error(error.message);
-            console.error(error);
+            toast.error(error.message)
+            console.error(error)
         }
-        setSubmitting(false);
-    };
+        setSubmitting(false)
+    }
 
     if (isLoading) {
         return (
@@ -170,5 +170,5 @@ export default function CreatePostForm() {
                 </Formik>
             </div>
         </div>
-    );
+    )
 }

@@ -6,15 +6,15 @@ import { ProgressSpinner } from 'primereact/progressspinner';
 import 'primeflex/primeflex.css';
 
 export default function Stats() {
-    const [stats, setStats] = useState(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const { token } = useContext(AuthContext);
+    const [stats, setStats] = useState(null)
+    const [isLoading, setIsLoading] = useState(true)
+    const { token } = useContext(AuthContext)
 
     useEffect(() => {
         if (!token) {
-            setIsLoading(false);
-            toast.error("Acceso denegado. No estás autenticado.");
-            return;
+            setIsLoading(false)
+            toast.error("Acceso denegado. No estás autenticado.")
+            return
         }
 
         const fetchStats = async () => {
@@ -23,31 +23,31 @@ export default function Stats() {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
-                });
+                })
 
                 if (!response.ok) {
-                    const err = await response.json();
-                    throw new Error(err.error || 'No se pudieron cargar las estadísticas');
+                    const err = await response.json()
+                    throw new Error(err.error || 'No se pudieron cargar las estadísticas')
                 }
                 
-                const data = await response.json();
-                setStats(data);
+                const data = await response.json()
+                setStats(data)
             } catch (error) {
-                toast.error(error.message);
+                toast.error(error.message)
             } finally {
-                setIsLoading(false);
+                setIsLoading(false)
             }
-        };
+        }
 
-        fetchStats();
-    }, [token]); 
+        fetchStats()
+    }, [token])
 
     if (isLoading) {
         return (
             <div className="flex justify-content-center align-items-center" style={{ height: '80vh' }}>
                 <ProgressSpinner />
             </div>
-        );
+        )
     }
 
     if (!stats) {
@@ -55,7 +55,7 @@ export default function Stats() {
             <Card title="Error">
                 <p>No se pudieron cargar las estadísticas. Es posible que no tengas los permisos de Administrador o Moderador.</p>
             </Card>
-        );
+        )
     }
 
     return (
@@ -90,5 +90,5 @@ export default function Stats() {
                 </div>
             </Card>
         </div>
-    );
+    )
 }

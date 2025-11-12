@@ -27,6 +27,24 @@ export const AuthProvider = ({ children }) => {
         }
     }, [])
 
+    const setAuthToken = (jwtToken) => {
+        if (!jwtToken) {
+            toast.error("No se recibio el token")
+            return
+        }
+        try {
+            localStorage.setItem('token', jwtToken)
+            const decoded = jwtDecode(jwtToken)
+            setUser(decoded)
+            setToken(jwtToken)
+        } catch (error) {
+            console.error("token invalido", error)
+            localStorage.removeItem("token")
+        }
+    }
+        
+
+
     const login = async (email, password) => {
         try {
             const response = await fetch('http://localhost:5000/login', {
@@ -39,22 +57,13 @@ export const AuthProvider = ({ children }) => {
                 if (response.status === 429) {
                     toast.error('Demasiados intentos. Intente mas tarde.')
                 } else {
-                    toast.error("Credenciales incorrectas");
-                    return false; 
+                    toast.error("Credenciales incorrectas")
+                    return false
                 }
             }
                 
             const data = await response.json()
-            const jwtToken = data.access_token
-
-
-
-            if (!jwtToken) return toast.error("No se recibio el token")
-
-            localStorage.setItem('token', jwtToken)
-            const decoded = jwtDecode(jwtToken)
-            setUser(decoded)
-            setToken(jwtToken)
+            setAuthToken(data.access_token)
 
             toast.success('Has iniciado sesion')
             return true
@@ -73,7 +82,7 @@ export const AuthProvider = ({ children }) => {
 
 
     return (
-        <AuthContext.Provider value={{ user, token, login, logout }}>
+        <AuthContext.Provider value={{ user, token, login, logout, setAuthToken }}>
             {children}
         </AuthContext.Provider>
     )

@@ -45,10 +45,10 @@ export default function Profile() {
             return
         }
 
-        const profileIdToFetch = urlParamId || user.sub;
+        const profileIdToFetch = urlParamId || user.sub
 
         const fetchProfile = async () => {
-            setIsLoading(true);
+            setIsLoading(true)
             try {
                 const response = await fetch(`http://localhost:5000/users/${profileIdToFetch}`, {
                     headers: {
@@ -62,9 +62,9 @@ export default function Profile() {
                 }
 
                 const data = await response.json()
-                setProfileData(data); 
+                setProfileData(data)
 
-                setSelectedRole(data.role);
+                setSelectedRole(data.role)
 
             } catch (error) {
                 toast.error(error.message)
@@ -91,7 +91,7 @@ export default function Profile() {
                     'Authorization': `Bearer ${token}`
                 },
                 body: JSON.stringify({ role: newRole }) 
-            });
+            })
 
             if (!response.ok) {
                 const err = await response.json()
@@ -105,7 +105,7 @@ export default function Profile() {
             toast.error(error.message)
             setSelectedRole(profileData.role)
         }
-    };
+    }
 
     if (isLoading) {
         return <ProgressSpinner style={{ width: '50px', height: '50px', display: 'block', margin: 'auto' }} />
@@ -148,7 +148,7 @@ export default function Profile() {
         } catch (error) {
             toast.error(error.message)
         }
-    };
+    }
 
     const confirmToggleStatus = () => {
         const currentlyActive = profileData.is_active
@@ -187,7 +187,7 @@ export default function Profile() {
                 />
             )}
         </div>
-    );
+    )
 
 
 
