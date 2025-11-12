@@ -8,7 +8,7 @@ import { Formik, Form, Field, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';        
 import { Tag } from 'primereact/tag';
-import logo from '../assets/logoblanco.png'
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 
 const CommentForm = ({ postId, token, onCommentAdded }) => {
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
@@ -68,6 +68,10 @@ export default function PostFeed() {
     const { user, token } = useContext(AuthContext);
     const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
+
+    const [editingId, setEditingId] = useState(null)
+    const [editContent, setEditContent] =useState('')
+
     const fetchPosts = async () => {
         try {
             const response = await fetch('http://localhost:5000/post');
@@ -92,8 +96,60 @@ export default function PostFeed() {
         fetchPosts();
     }, []);
 
+    const handleDeletePost = async (postId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/post/${postId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!response.ok) throw new Error('No se pudo eliminar el post');
+            toast.success('Post eliminado');
+            fetchPosts(); // Recarga todos los posts
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (!response.ok) throw new Error('No se pudo eliminar el comentario');
+            toast.success('Comentario eliminado');
+            fetchPosts(); // Recarga los posts para actualizar la lista de comentarios
+        } catch (error) {
+            toast.error(error.message);
+        }
+    };
+
+    const confirmDeletePost = (postId) => {
+        confirmDialog({
+            message: '¿Estás seguro de que quieres eliminar este post?',
+            header: 'Confirmar Eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sí, eliminar',
+            acceptClassName: 'p-button-danger',
+            accept: () => handleDeletePost(postId)
+        });
+    };
+
+    const confirmDeleteComment = (commentId) => {
+        confirmDialog({
+            message: '¿Estás seguro de que quieres eliminar este comentario?',
+            header: 'Confirmar Eliminación',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sí, eliminar',
+            acceptClassName: 'p-button-danger',
+            accept: () => handleDeleteComment(commentId)
+        });
+    };
+
     return (
         <div className="post-feed">
+            <ConfirmDialog />
+
             {posts.map((post) => (
                 <Card 
                     className="post-card" 
@@ -114,13 +170,40 @@ export default function PostFeed() {
                         ))}
                     </div>
 
+                    {user && user.role === 'admin' && (
+                        <Button
+                            label="Eliminar Post"
+                            icon="pi pi-trash"
+                            className="p-button-danger p-button-sm"
+                            style={{ marginTop: '1rem', display: 'block' }}
+                            onClick={() => confirmDeletePost(post.id)}
+                        />
+                    )}
+
                     <div className="comments-section">
                         <h5>Comentarios:</h5>
                         {post.comments && post.comments.length > 0 ? (
                             post.comments.map((comment) => (
-                                <div key={comment.id} style={{ borderBottom: '1px solid #eee', padding: '0.5rem 0' }}>
+                                <div 
+                                    key={comment.id} 
+                                    style={{ 
+                                        borderBottom: '1px solid #eee', 
+                                        padding: '0.5rem 0', 
+                                        display: 'flex',
+                                        justifyContent: 'space-between',
+                                        alignItems: 'center'    
+                                    }}>
                                     <strong>{comment.user.username}:</strong>
                                     <p style={{ margin: 0 }}>{comment.content}</p>
+
+                                    {user && (user.role === 'admin' || user.role === 'moderator') && (
+                                        <Button
+                                            icon="pi pi-trash"
+                                            className="p-button-danger p-button-text p-button-sm"
+                                            onClick={() => confirmDeleteComment(comment.id)}
+                                            tooltip="Eliminar comentario"
+                                        />
+                                    )}
                                 </div>
                             ))
                         ) : (
