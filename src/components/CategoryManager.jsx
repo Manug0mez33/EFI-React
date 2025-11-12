@@ -15,39 +15,39 @@ import { Dialog } from 'primereact/dialog';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('El nombre es obligatorio')
-});
+})
 
 export default function CategoryManager() {
-    const { user, token } = useContext(AuthContext);
-    const navigate = useNavigate();
+    const { user, token } = useContext(AuthContext)
+    const navigate = useNavigate()
 
-    const [categories, setCategories] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [editDialog, setEditDialog] = useState(false);
-    const [currentCategory, setCurrentCategory] = useState(null);
+    const [categories, setCategories] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
+    const [editDialog, setEditDialog] = useState(false)
+    const [currentCategory, setCurrentCategory] = useState(null)
 
     const fetchCategories = async () => {
         if (!user || (user.role !== 'admin' && user.role !== 'moderator')) {
-            toast.error("Acceso denegado.");
-            navigate('/posts');
-            return;
+            toast.error("Acceso denegado.")
+            navigate('/posts')
+            return
         }
 
         try {
-            const response = await fetch('http://localhost:5000/category');
-            if (!response.ok) throw new Error('No se pudieron cargar las categorías');
-            const data = await response.json();
-            setCategories(data);
+            const response = await fetch('http://localhost:5000/category')
+            if (!response.ok) throw new Error('No se pudieron cargar las categorías')
+            const data = await response.json()
+            setCategories(data)
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         } finally {
-            setIsLoading(false);
+            setIsLoading(false)
         }
     };
 
     useEffect(() => {
-        fetchCategories();
-    }, [user, navigate]);
+        fetchCategories()
+    }, [user, navigate])
 
     const handleCreate = async (values, { setSubmitting, resetForm }) => {
         try {
@@ -55,23 +55,23 @@ export default function CategoryManager() {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(values)
-            });
-            const data = await response.json();
-            if (!response.ok) throw new Error(data.message || 'Error al crear');
+            })
+            const data = await response.json()
+            if (!response.ok) throw new Error(data.message || 'Error al crear')
 
-            toast.success("Categoría creada");
-            setCategories(prev => [...prev, data]);
-            resetForm();
+            toast.success("Categoría creada")
+            setCategories(prev => [...prev, data])
+            resetForm()
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         }
-        setSubmitting(false);
-    };
+        setSubmitting(false)
+    }
 
     const openEditDialog = (category) => {
-        setCurrentCategory(category);
-        setEditDialog(true);
-    };
+        setCurrentCategory(category)
+        setEditDialog(true)
+    }
 
     const handleEdit = async (values, { setSubmitting }) => {
         try {
@@ -79,22 +79,22 @@ export default function CategoryManager() {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify(values)
-            });
-            if (!response.ok) throw new Error('Error al actualizar');
+            })
+            if (!response.ok) throw new Error('Error al actualizar')
 
-            toast.success("Categoría actualizada");
-            setEditDialog(false);
-            fetchCategories(); 
+            toast.success("Categoría actualizada")
+            setEditDialog(false)
+            fetchCategories()
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         }
-        setSubmitting(false);
-    };
+        setSubmitting(false)
+    }
 
     const confirmDelete = (category) => {
         if (user.role !== 'admin') {
-            toast.error("Solo los administradores pueden eliminar categorías.");
-            return;
+            toast.error("Solo los administradores pueden eliminar categorías.")
+            return
         }
 
         confirmDialog({
@@ -104,23 +104,23 @@ export default function CategoryManager() {
             acceptLabel: 'Sí, eliminar',
             acceptClassName: 'p-button-danger',
             accept: () => handleDelete(category.id),
-        });
-    };
+        })
+    }
 
     const handleDelete = async (categoryId) => {
         try {
             const response = await fetch(`http://localhost:5000/category/${categoryId}`, {
                 method: 'DELETE',
                 headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (!response.ok) throw new Error('Error al eliminar');
+            })
+            if (!response.ok) throw new Error('Error al eliminar')
 
-            toast.success("Categoría eliminada (ocultada)");
-            fetchCategories(); 
+            toast.success("Categoría eliminada (ocultada)")
+            fetchCategories()
         } catch (error) {
-            toast.error(error.message);
+            toast.error(error.message)
         }
-    };
+    }
 
     const actionBodyTemplate = (rowData) => {
         return (
@@ -133,8 +133,8 @@ export default function CategoryManager() {
         );
     };
 
-    if (isLoading) return <ProgressSpinner style={{ width: '50px', height: '50px', display: 'block', margin: 'auto' }} />;
-    if (!user || (user.role !== 'admin' && user.role !== 'moderator')) return null;
+    if (isLoading) return <ProgressSpinner style={{ width: '50px', height: '50px', display: 'block', margin: 'auto' }} />
+    if (!user || (user.role !== 'admin' && user.role !== 'moderator')) return null
 
     return (
         <div className="category-manager" style={{ display: 'flex', gap: '2rem', padding: '1rem' }}>

@@ -8,6 +8,7 @@ import Layout from "./components/Layout";
 import Profile from "./components/Profile";
 import Users from "./components/Users";
 import CategoryManager from "./components/CategoryManager";
+import Stats from './components/Stats';
 
 export default function App() {
   return (
@@ -23,6 +24,7 @@ export default function App() {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/users" element={<Users/>} />
         <Route path="/category" element={<CategoryManager/>} />
+        <Route path="/stats" element={<Stats/>} />
       </Route>
     </Routes>
   );

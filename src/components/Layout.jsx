@@ -51,6 +51,12 @@ export default function Layout() {
                 icon: 'pi pi-fw pi-list',
                 command: () => navigate('/category')
             });
+
+            userItems.push({
+                label: 'Estadísticas',
+                icon: 'pi pi-fw pi-chart-bar',
+                command: () => navigate('/stats')
+            });
         }
 
 
