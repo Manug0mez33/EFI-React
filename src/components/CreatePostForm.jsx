@@ -7,7 +7,8 @@ import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { MultiSelect } from 'primereact/multiselect';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { ProgressSpinner } from 'primereact/progressspinner';
 import "../styles/CreatePostForm.css"
 
 const validationSchema = Yup.object({
@@ -20,7 +21,18 @@ export default function CreatePostForm() {
     const { token } = useContext(AuthContext);
     const navigate = useNavigate()
 
+    const { postId } = useParams()
+    const isEditMode = Boolean(postId)
+
     const [categories, setCategories] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    const [initialValues, setInitialValues] = useState({
+        title: '',
+        content: '',
+        categories: []
+    });
+
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -29,7 +41,6 @@ export default function CreatePostForm() {
                 if (!response.ok) {
                     throw new Error('No se pudieron cargar las categorías');
                 }
-
                 const data = await response.json();
                 setCategories(data);
             } catch (error) {
@@ -40,6 +51,32 @@ export default function CreatePostForm() {
         fetchCategories();
     }, []);
 
+    useEffect(() => {
+        if (isEditMode) {
+            const fetchPostData = async () => {
+                try {
+                    const response = await fetch(`http://localhost:5000/post/${postId}`);
+                    if (!response.ok) {
+                        throw new Error('No se pudo cargar el post');
+                    }
+                    const postData = await response.json();
+                    setInitialValues({
+                        title: postData.title,
+                        content: postData.content,
+                        categories: postData.categories_data.map(category => category.id)
+                    });
+                } catch (error) {
+                    toast.error(error.message)
+                    navigate('/posts')
+                } finally {
+                    setIsLoading(false);
+                }
+            };
+            fetchPostData();
+        } 
+    }, [isEditMode, postId, navigate])
+                
+
     const handleSubmit = async (values, { setSubmitting, resetForm }) => {
         if (!token) {
             toast.error("Debes iniciar sesión para postear");
@@ -47,9 +84,12 @@ export default function CreatePostForm() {
             return;
         }
 
+        const url = isEditMode ? `http://localhost:5000/post/${postId}` : 'http://localhost:5000/post';
+        const method = isEditMode ? 'PUT' : 'POST';
+
         try {
-            const response = await fetch('http://localhost:5000/post', {
-                    method: 'POST',
+            const response = await fetch(url, {
+                    method: method,
                     headers: {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}` 
@@ -63,8 +103,7 @@ export default function CreatePostForm() {
                 throw new Error(errorData.error || errorData.message || 'Error al crear el post');
             }
 
-            toast.success("Post creado con éxito");
-            resetForm();
+            toast.success(isEditMode ? "Post actualizado" : "Post creado");
             setTimeout(() => navigate('/posts'), 2000) 
         } catch (error) {
             toast.error(error.message);
@@ -73,14 +112,23 @@ export default function CreatePostForm() {
         setSubmitting(false);
     };
 
+    if (isLoading) {
+        return (
+            <div className='post-content-container' style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <ProgressSpinner />
+            </div>
+        )
+    }
+
     return (
         <div className='post-content-container'>
             <div className="post-container">
-                <h3>Crear un nuevo post</h3>
+                <h3>{isEditMode ? "Editar Post" : "Crear Post"}</h3>
                 <Formik
-                    initialValues={{ title: '', content: '', categories: [] }}
+                    initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSubmit}
+                    enableReinitialize
                 >
                     {({ isSubmitting }) => (
                         <Form className="post-form">
@@ -111,7 +159,12 @@ export default function CreatePostForm() {
                                 <ErrorMessage name="categories" component="small" className="p-error" />
                             </div>
 
-                            <Button type="submit" className='post-button' label={isSubmitting ? "Posteando..." : "Postear"} disabled={isSubmitting} />
+                            <Button 
+                                type="submit" 
+                                className='post-button' 
+                                label={isSubmitting ? "Guardando..." : (isEditMode ? "Guardar Cambios" : "Postear")}
+                                disabled={isSubmitting} 
+                            />
                         </Form>
                     )}
                 </Formik>

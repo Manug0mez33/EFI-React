@@ -18,6 +18,7 @@ export default function App() {
         <Route path="/register" element={<RegisterForm />} />
         <Route path="/login" element={<LoginForm />} />
         <Route path="/post" element={<CreatePostForm />} />
+        <Route path="/post/:postId/edit" element={<CreatePostForm />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/users" element={<Users/>} />

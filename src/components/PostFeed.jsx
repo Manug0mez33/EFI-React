@@ -214,7 +214,7 @@ export default function PostFeed() {
                                     label="Editar Post"
                                     icon="pi pi-pencil"
                                     className="p-button-info p-button-sm"
-                                    onClick={() => startEdit(post)} 
+                                    onClick={() => navigate(`/post/${post.id}/edit`)} 
                                 />
                                 <Button
                                     label="Eliminar Post"
