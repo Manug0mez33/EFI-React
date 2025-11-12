@@ -235,3 +235,14 @@ html, body, #root {
     border: 1px solid #494444;
     color: #494444;
 }      
+
+.login-button {
+    background-color: #494444;
+    border: 1px solid #494444;
+}
+
+.login-button:hover {
+    background-color: #d7d961;
+    border: 1px solid #494444;
+    color: #494444;
+}

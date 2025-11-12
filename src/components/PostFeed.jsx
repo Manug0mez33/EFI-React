@@ -146,87 +146,173 @@ export default function PostFeed() {
         });
     };
 
+    const startEdit = (comment) => {
+        setEditingId(comment.id)
+        setEditContent(comment.content)
+    }
+
+    const cancelEdit = () => {
+        setEditingId(null)
+        setEditContent('')
+    }
+
+    const submitEdit = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/comments/${editingId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ content: editContent })
+            })
+                if (!response.ok) {
+                    const err = await response.json()
+                    throw new Error(err.error || 'No se pudo editar el comentario')
+                }
+
+                toast.success('Comentario actualizado')
+                cancelEdit()
+                fetchPosts()
+            } catch (error) {
+                toast.error(error.message)
+            }
+        }
+
     return (
         <div className="post-feed">
             <ConfirmDialog />
 
-            {posts.map((post) => (
-                <Card 
-                    className="post-card" 
-                    key={post.id} 
-                    title={post.title} 
-                    subTitle={`Por: ${post.user.username} - ${new Date(post.date_created).toLocaleDateString()}`}
-                >
-                    <p>{post.content}</p>
-                    
-                    <div className="categories-tags" style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                        {post.categories_data && post.categories_data.map((category) => (
-                            <Tag 
-                                key={category.id} 
-                                value={category.name} 
-                                severity="warning"
-                                className='category-tag'
-                            />
-                        ))}
-                    </div>
+            {posts.map((post) => {
+                const isAdmin = user && user.role === 'admin';
+                const isMod = user && user.role === 'moderator';
+                const isPostOwner = user && parseInt(user.sub) === post.user.id;
 
-                    {user && user.role === 'admin' && (
-                        <Button
-                            label="Eliminar Post"
-                            icon="pi pi-trash"
-                            className="p-button-danger p-button-sm"
-                            style={{ marginTop: '1rem', display: 'block' }}
-                            onClick={() => confirmDeletePost(post.id)}
-                        />
-                    )}
+                return (
+                    <Card 
+                        className="post-card" 
+                        key={post.id} 
+                        title={post.title} 
+                        subTitle={`Por: ${post.user.username} - ${new Date(post.date_created).toLocaleDateString()}`}
+                    >
+                        <p>{post.content}</p>
 
-                    <div className="comments-section">
-                        <h5>Comentarios:</h5>
-                        {post.comments && post.comments.length > 0 ? (
-                            post.comments.map((comment) => (
-                                <div 
-                                    key={comment.id} 
-                                    style={{ 
-                                        borderBottom: '1px solid #eee', 
-                                        padding: '0.5rem 0', 
-                                        display: 'flex',
-                                        justifyContent: 'space-between',
-                                        alignItems: 'center'    
-                                    }}>
-                                    <strong>{comment.user.username}:</strong>
-                                    <p style={{ margin: 0 }}>{comment.content}</p>
+                        <div className="categories-tags" style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                            {post.categories_data && post.categories_data.map((category) => (
+                                <Tag 
+                                    key={category.id} 
+                                    value={category.name} 
+                                    severity="warning"
+                                    className='category-tag'
+                                />
+                            ))}
+                        </div>
 
-                                    {user && (user.role === 'admin' || user.role === 'moderator') && (
-                                        <Button
-                                            icon="pi pi-trash"
-                                            className="p-button-danger p-button-text p-button-sm"
-                                            onClick={() => confirmDeleteComment(comment.id)}
-                                            tooltip="Eliminar comentario"
-                                        />
-                                    )}
-                                </div>
-                            ))
-                        ) : (
-                            <p>No hay comentarios. ¡Sé el primero!</p>
-                        )}
-                        
-                        {user && token && (
-                            <CommentForm 
-                                postId={post.id} 
-                                token={token} 
-                                onCommentAdded={fetchPosts} 
-                            />
-                        )}
-
-                        {!user && !token && (
-                            <div>
-                                <p>Inicia sesion para dejar un comentario.</p>
-                                <Button label='Iniciar sesion' className='extra-button' onClick={() => navigate('/login')} icon='pi pi-sign-in'/>
+                        {(isAdmin || isPostOwner) && (
+                            <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+                                <Button
+                                    label="Editar Post"
+                                    icon="pi pi-pencil"
+                                    className="p-button-info p-button-sm"
+                                    onClick={() => startEdit(post)} 
+                                />
+                                <Button
+                                    label="Eliminar Post"
+                                    icon="pi pi-trash"
+                                    className="p-button-danger p-button-sm"
+                                    onClick={() => confirmDeletePost(post.id)}
+                                />
                             </div>
                         )}
-                    </div>
-                </Card>
-            ))}
+
+                        <div className="comments-section">
+                            <h5>Comentarios:</h5>
+                            {post.comments && post.comments.length > 0 ? (
+                                post.comments.map((comment) => {
+                                    
+                                    const isCommentOwner = user && parseInt(user.sub) === comment.user.id;
+                                    const canDeleteComment = isAdmin || isMod || isCommentOwner;
+                                    const canEditComment = isCommentOwner;
+
+                                    return (
+                                        <div 
+                                            key={comment.id} 
+                                            style={{ borderBottom: '1px solid #eee', padding: '0.5rem 0' }}
+                                        >
+                                            {editingId === comment.id ? (
+                                                <div>
+                                                    <InputTextarea 
+                                                        value={editContent}
+                                                        onChange={(e) => setEditContent(e.target.value)}
+                                                        rows={2}
+                                                        autoResize
+                                                        className="w-full"
+                                                    />
+                                                    <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.5rem' }}>
+                                                        <Button 
+                                                            label="Guardar" 
+                                                            icon="pi pi-check" 
+                                                            className="p-button-success p-button-sm"
+                                                            onClick={submitEdit} 
+                                                        />
+                                                        <Button 
+                                                            label="Cancelar" 
+                                                            icon="pi pi-times" 
+                                                            className="p-button-text p-button-sm"
+                                                            onClick={cancelEdit}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ) : (
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                    <div>
+                                                        <strong>{comment.user.username}:</strong>
+                                                        <p style={{ margin: 0 }}>{comment.content}</p>
+                                                    </div>
+                                                    <div style={{ display: 'flex', gap: '0.25rem' }}>
+                                                        {canEditComment && (
+                                                            <Button
+                                                                icon="pi pi-pencil"
+                                                                className="p-button-info p-button-text p-button-sm"
+                                                                onClick={() => startEdit(comment)}
+                                                                tooltip="Editar"
+                                                            />
+                                                        )}
+                                                        {canDeleteComment && (
+                                                            <Button
+                                                                icon="pi pi-trash"
+                                                                className="p-button-danger p-button-text p-button-sm"
+                                                                onClick={() => confirmDeleteComment(comment.id)}
+                                                                tooltip="Eliminar"
+                                                            />
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })
+                            ) : (
+                                <p>No hay comentarios. ¡Sé el primero!</p>
+                            )}
+                            {user && token && (
+                                <CommentForm 
+                                    postId={post.id} 
+                                    token={token} 
+                                    onCommentAdded={fetchPosts} 
+                                />
+                            )}
+
+                            {!user && !token && (
+                                <div>
+                                    <p>Inicia sesion para dejar un comentario.</p>
+                                    <Button label='Iniciar sesion' className='extra-button' onClick={() => navigate('/login')} icon='pi pi-sign-in'/>
+                                </div>
+                            )}
+                        </div>
+                    </Card>
+                );
+            })}
         </div>
     );
 }

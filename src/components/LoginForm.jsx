@@ -52,7 +52,7 @@ export default function LoginForm() {
                             <Field as={Password} id='password' name='password' className='w-full' inputClassName='w-full' feedback={false} toggleMask/>
                             <ErrorMessage name='password' component='small' className='error' />
                         </div>
-                        <Button type='submit' label={isSubmitting ? "Ingresando..." : 'Ingresar'} disabled={isSubmitting} />
+                        <Button type='submit' className='login-button' label={isSubmitting ? "Ingresando..." : 'Ingresar'} disabled={isSubmitting} />
                     </Form>
                 )}
             </Formik>
