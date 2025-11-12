@@ -99,12 +99,6 @@ export default function Users() {
                         body={userIsActive} 
                     />
                     <Column field="role" header="Rol" sortable />
-                    <Column 
-                        field="created_at" 
-                        header="Fecha de Creación" 
-                        body={created_at} 
-                        sortable 
-                    />
                     <Column
                         header="Acciones"
                         body={actions}

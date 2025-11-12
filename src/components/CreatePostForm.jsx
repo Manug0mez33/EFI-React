@@ -25,7 +25,7 @@ export default function CreatePostForm() {
     const isEditMode = Boolean(postId)
 
     const [categories, setCategories] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [initialValues, setInitialValues] = useState({
         title: '',
