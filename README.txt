@@ -8,9 +8,6 @@
     3 - npm install
     4 - npm run dev
 
-
-
-
 ## Comentarios
 
         - El nombre de nuestro blog es Posteo Diario. Adaptamos casi al 100% nuestro front a nuestra API de flask.
