@@ -83,9 +83,8 @@ export default function PostFeed() {
             }
             
             const postData = await response.json()
-
-            setPosts(postData.posts)
-        
+ 
+            setPosts(postData.posts || postData || [])
         } catch (error) {
             console.error(error)
             toast.error(error.message)
